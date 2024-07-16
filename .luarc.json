@@ -1,0 +1,48 @@
+{
+    "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.workspace.library": [
+        "/home/casper/.config/nvim",
+        "/etc/xdg/nvim",
+        "/home/casper/.local/share/nvim/site",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/LuaSnip",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/lightline.vim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/lualine.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nebulous.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-autopairs",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-base16",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-cmp",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-treesitter-textobjects",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-ts-autotag",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/onedark.vim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/packer.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/plenary.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/telescope.nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/vim-commentary",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/vim-eldar",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/vim-fugitive",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/vim-gutentags",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/vim-surround",
+        "/usr/share/nvim/site",
+        "/usr/share/nvim/site/pack/packer/start/packer.nvim",
+        "/usr/share/nvim/runtime",
+        "/usr/lib/nvim",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after",
+        "/home/casper/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after",
+        "/usr/share/vim/vimfiles",
+        "${3rd}/love2d/library"
+    ],
+    "diagnostics.globals": [
+    ],
+    "diagnostics.disable": [
+        "lowercase-global"
+    ]
+}
