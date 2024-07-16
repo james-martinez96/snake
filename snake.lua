@@ -1,11 +1,23 @@
 function love.load()
-    gridXCount = 20
-    gridYCount = 15
+    local _, _, flags = love.window.getMode()
+    monitorWidth, monitorHeight = love.window.getDesktopDimensions(flags.display)
+    windowWidth = tonumber(monitorWidth)
+    windowHeight = tonumber(monitorHeight)
+    if windowWidth == nil or windowHeight == nil then
+        print("Error: monitor dimensions could not be determined")
+        return
+    end
 
-    -- local windowWidth = 1000
-    -- local windowHeight = 900
-    -- love.window.setMode(windowWidth, windowHeight)
-    print(love.window.getMode())
+    success = love.window.setMode(windowWidth, windowHeight, { fullscreen = true })
+    if not success then
+        print("Faliure")
+    else
+        print("Success")
+    end
+
+    cellSize = 15
+    gridXCount = math.floor(windowWidth / cellSize)
+    gridYCount = math.floor(windowHeight / cellSize)
 
     function moveFood()
         local possibleFoodPositions = {}
@@ -125,8 +137,6 @@ function love.keypressed(key)
 end
 
 function love.draw()
-    local cellSize = 15
-
     love.graphics.setColor(0.28, 0.28, 0.28)
     love.graphics.rectangle("fill", 0, 0, gridXCount * cellSize, gridYCount * cellSize)
 
