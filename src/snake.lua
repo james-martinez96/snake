@@ -1,58 +1,22 @@
+local food = require("food")
+local window = require("window")
+
+cellSize, gridXCount, gridYCount = window.setupWindow()
+
+local function reset()
+    snakeSegments = {
+        { x = 3, y = 1 },
+        { x = 2, y = 1 },
+        { x = 1, y = 1 },
+    }
+    directionQueue = { "right" }
+    snakeAlive = true
+    timer = 0
+    -- food.moveFood()
+    foodPosition = food.moveFood(gridXCount, gridYCount, snakeSegments)
+end
+
 function love.load()
-    local _, _, flags = love.window.getMode()
-    monitorWidth, monitorHeight = love.window.getDesktopDimensions(flags.display)
-    windowWidth = tonumber(monitorWidth)
-    windowHeight = tonumber(monitorHeight)
-    if windowWidth == nil or windowHeight == nil then
-        print("Error: monitor dimensions could not be determined")
-        return
-    end
-
-    success = love.window.setMode(windowWidth, windowHeight, { fullscreen = true })
-    if not success then
-        print("Faliure")
-    else
-        print("Success")
-    end
-
-    cellSize = 15
-    gridXCount = math.floor(windowWidth / cellSize)
-    gridYCount = math.floor(windowHeight / cellSize)
-
-    function moveFood()
-        local possibleFoodPositions = {}
-
-        for foodX = 1, gridXCount do
-            for foodY = 1, gridYCount do
-                local possible = true
-
-                for segmentIndex, segment in ipairs(snakeSegments) do
-                    if foodX == segment.x and foodY == segment.y then
-                        possible = false
-                    end
-                end
-
-                if possible then
-                    table.insert(possibleFoodPositions, { x = foodX, y = foodY })
-                end
-            end
-        end
-
-        foodPosition = possibleFoodPositions[love.math.random(#possibleFoodPositions)]
-    end
-
-    function reset()
-        snakeSegments = {
-            { x = 3, y = 1 },
-            { x = 2, y = 1 },
-            { x = 1, y = 1 },
-        }
-        directionQueue = { "right" }
-        snakeAlive = true
-        timer = 0
-        moveFood()
-    end
-
     reset()
 end
 
@@ -107,7 +71,8 @@ function love.update(dt)
                 })
 
                 if snakeSegments[1].x == foodPosition.x and snakeSegments[1].y == foodPosition.y then
-                    moveFood()
+                    -- food.moveFood(gridXCount, gridYCount, snakeSegments)
+                    foodPosition = food.moveFood(gridXCount, gridYCount, snakeSegments)
                 else
                     table.remove(snakeSegments)
                 end
