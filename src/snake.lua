@@ -1,12 +1,12 @@
-local window = require("window")
-local LayoutManager = require("ui.LayoutManager")
 local Button = require("ui.Button")
+local LayoutManager = require("ui.LayoutManager")
 local food = require("food")
+local window = require("window")
 
-cellSize, gridXCount, gridYCount = window.setupWindow()
+TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT = window.setupWindow()
 
 ---@type LayoutManager
-local layout = LayoutManager:new(50, 50, 10, 20, "vertical")
+local layout = LayoutManager:new(50, 50, 0, 20, "vertical")
 
 local buttons = {}
 
@@ -25,8 +25,7 @@ local function reset()
     directionQueue = { "right" }
     snakeAlive = true
     timer = 0
-    -- food.moveFood()
-    foodPosition = food.moveFood(gridXCount, gridYCount, snakeSegments)
+    foodPosition = food.moveFood(TILE_X_COUNT, TILE_Y_COUNT, snakeSegments)
 end
 
 function love.load()
@@ -54,23 +53,23 @@ function love.update(dt)
 
             if directionQueue[1] == "right" then
                 nextXPosition = nextXPosition + 1
-                if nextXPosition > gridXCount then
+                if nextXPosition > TILE_X_COUNT then
                     nextXPosition = 1
                 end
             elseif directionQueue[1] == "left" then
                 nextXPosition = nextXPosition - 1
                 if nextXPosition < 1 then
-                    nextXPosition = gridXCount
+                    nextXPosition = TILE_X_COUNT
                 end
             elseif directionQueue[1] == "down" then
                 nextYPosition = nextYPosition + 1
-                if nextYPosition > gridYCount then
+                if nextYPosition > TILE_Y_COUNT then
                     nextYPosition = 1
                 end
             elseif directionQueue[1] == "up" then
                 nextYPosition = nextYPosition - 1
                 if nextYPosition < 1 then
-                    nextYPosition = gridYCount
+                    nextYPosition = TILE_Y_COUNT
                 end
             end
 
@@ -89,8 +88,7 @@ function love.update(dt)
                 })
 
                 if snakeSegments[1].x == foodPosition.x and snakeSegments[1].y == foodPosition.y then
-                    -- food.moveFood(gridXCount, gridYCount, snakeSegments)
-                    foodPosition = food.moveFood(gridXCount, gridYCount, snakeSegments)
+                    foodPosition = food.moveFood(TILE_X_COUNT, TILE_Y_COUNT, snakeSegments)
                 else
                     table.remove(snakeSegments)
                 end
@@ -119,13 +117,29 @@ function love.keypressed(key)
     end
 end
 
-function love.draw()
-    love.graphics.setColor(0.28, 0.28, 0.28)
-    love.graphics.rectangle("fill", 0, 0, gridXCount * cellSize, gridYCount * cellSize)
+function drawGrid()
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.setLineWidth(3)
 
-    local function drawCell(x, y)
-        love.graphics.rectangle("fill", (x - 1) * cellSize, (y - 1) * cellSize, cellSize - 1, cellSize - 1)
+    -- Horizontal lines
+    for i = 0, TILE_Y_COUNT do
+        love.graphics.line(0, i * TILE_SIZE, TILE_X_COUNT * TILE_SIZE, i * TILE_SIZE)
     end
+
+    -- Vertical lines
+    for i = 0, TILE_X_COUNT do
+        love.graphics.line(i * TILE_SIZE, 0, i * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
+    end
+end
+
+local function drawCell(x, y)
+    love.graphics.rectangle("fill", (x - 1) * TILE_SIZE, (y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+end
+
+function love.draw()
+    -- Background
+    love.graphics.setColor(0.28, 0.28, 0.28)
+    love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
 
     for segmentIndex, segment in ipairs(snakeSegments) do
         if snakeAlive then
@@ -139,7 +153,10 @@ function love.draw()
     love.graphics.setColor(1, 0.3, 0.3)
     drawCell(foodPosition.x, foodPosition.y)
 
+    -- drawGrid()
+
     for _, button in ipairs(buttons) do
         button:draw()
     end
+
 end

@@ -1,14 +1,14 @@
 local M = {}
 
----@return integer
----@return integer
----@return integer
+--- @return integer TILE_SIZE
+--- @return integer TILE_X_COUNT
+--- @return integer TILE_Y_COUNT
 function M.setupWindow()
     local _, _, flags = love.window.getMode()
     local monitorWidth, monitorHeight = love.window.getDesktopDimensions(flags.display)
-    local width = tonumber(monitorWidth)
-    local height = tonumber(monitorHeight)
-    if width == nil or height == nil then
+    local WINDOW_WIDTH = tonumber(monitorWidth)
+    local WINDOW_HEIGHT = tonumber(monitorHeight)
+    if WINDOW_WIDTH == nil or WINDOW_HEIGHT == nil then
         print("Error: monitor dimensions could not be determined")
     end
 
@@ -19,12 +19,12 @@ function M.setupWindow()
         print("Success")
     end
 
-    local cellSize = 15
+    local TILE_SIZE = 10
 
-    local gridXCount = math.floor(width / cellSize)
-    local gridYCount = math.floor(height / cellSize)
+    local TILE_X_COUNT = math.floor(WINDOW_WIDTH / TILE_SIZE)
+    local TILE_Y_COUNT = math.floor(WINDOW_HEIGHT / TILE_SIZE)
 
-    return cellSize, gridXCount, gridYCount
+    return TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT
 end
 
 return M
