@@ -1,7 +1,20 @@
-local food = require("food")
 local window = require("window")
+local LayoutManager = require("ui.LayoutManager")
+local Button = require("ui.Button")
+local food = require("food")
 
 cellSize, gridXCount, gridYCount = window.setupWindow()
+
+---@type LayoutManager
+local layout = LayoutManager:new(50, 50, 10, 20, "vertical")
+
+local buttons = {}
+
+for i = 1, 3 do
+    local button = Button:new("Button " .. i, 0, 0, 100, 30)
+    table.insert(buttons, button)
+    layout:addElement(button, button.w, button.h)
+end
 
 local function reset()
     snakeSegments = {
@@ -22,6 +35,11 @@ end
 
 function love.update(dt)
     timer = timer + dt
+    for _, button in ipairs(buttons) do
+        if button:isClicked() then
+            print(button.text .. " clicked!")
+        end
+    end
 
     if snakeAlive then
         if timer >= 0.15 then
@@ -120,4 +138,8 @@ function love.draw()
 
     love.graphics.setColor(1, 0.3, 0.3)
     drawCell(foodPosition.x, foodPosition.y)
+
+    for _, button in ipairs(buttons) do
+        button:draw()
+    end
 end
