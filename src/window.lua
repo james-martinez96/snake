@@ -12,17 +12,18 @@ function M.setupWindow()
         print("Error: monitor dimensions could not be determined")
     end
 
-    local success = love.window.setMode(0, 0, { fullscreen = true })
+    local success = love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, { fullscreen = true })
     if not success then
         print("Failure")
     else
         print("Success")
     end
 
-    local TILE_SIZE = 10
+    local TILE_SIZE = 30
 
     local TILE_X_COUNT = math.floor(WINDOW_WIDTH / TILE_SIZE)
     local TILE_Y_COUNT = math.floor(WINDOW_HEIGHT / TILE_SIZE)
+    print(TILE_X_COUNT, TILE_Y_COUNT)
 
     return TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT
 end

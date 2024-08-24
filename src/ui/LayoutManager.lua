@@ -20,15 +20,15 @@ LayoutManager.__index = LayoutManager
 --- @param layoutDirection string The direction of the layout, either `vertical` or `horizontal`.
 --- @return table self A new instance of LayoutManager.
 function LayoutManager:new(x, y, spacingX, spacingY, layoutDirection)
-    local self = setmetatable({}, LayoutManager)
-    self.x = x
-    self.y = y
-    self.spacingX = spacingX
-    self.spacingY = spacingY
-    self.layoutDirection = layoutDirection
-    self.currentX = self.x
-    self.currentY = self.y
-    return self
+    local instance = setmetatable({}, LayoutManager)
+    instance.x = x
+    instance.y = y
+    instance.spacingX = spacingX
+    instance.spacingY = spacingY
+    instance.layoutDirection = layoutDirection
+    instance.currentX = instance.x
+    instance.currentY = instance.y
+    return instance
 end
 
 --- Adds an element to the layout.
