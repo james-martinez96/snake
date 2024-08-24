@@ -1,93 +1,121 @@
-local Button = require("ui.Button")
-local LayoutManager = require("ui.LayoutManager")
-local food = require("food")
-local window = require("window")
-local Snake = require("player")
+local Snake = {}
+Snake.__index = Snake
 
-TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT = window.setupWindow()
----@type LayoutManager
-local layout = LayoutManager:new(50, 50, 0, 20, "vertical")
-
-local buttons = {}
-
-for i = 1, 3 do
-    local button = Button:new("Button " .. i, 0, 0, 100, 30)
-    table.insert(buttons, button)
-    layout:addElement(button, button.w, button.h)
+function Snake:new(startingSegments, tileSize, tileXCount, tileYCount)
+    local instance = setmetatable({}, Snake)
+    instance.segments = startingSegments
+    instance.directionQueue = { "right" }
+    instance.alive = true
+    instance.tileSize = tileSize
+    instance.tileXCount = tileXCount
+    instance.tileYCount = tileYCount
+    instance.timer = 0
+    return instance
 end
 
-local snake = Snake:new({
-    { x = 3, y = 1 },
-    { x = 2, y = 1 },
-    { x = 1, y = 1 },
-}, TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT)
-
-function love.load()
-    snake:reset()
-    foodPosition = food.moveFood(TILE_X_COUNT, TILE_Y_COUNT, snake.segments)
+function Snake:reset()
+    self.segments = {
+        { x = 3, y = 1 },
+        { x = 2, y = 1 },
+        { x = 1, y = 1 },
+    }
+    self.directionQueue = { "right" }
+    self.alive = true
+    self.timer = 0
 end
 
-function love.update(dt)
-    snake:update(dt)
+function Snake:update(dt)
+    self.timer = self.timer + dt
+    if self.alive then
+        if self.timer >= 0.1 then
+            self.timer = 0
 
-    for _, button in ipairs(buttons) do
-        if button:isClicked() then
-            print(button.text .. " clicked!")
+            if #self.directionQueue > 1 then
+                table.remove(self.directionQueue, 1)
+            end
+
+            local nextXPosition = self.segments[1].x
+            local nextYPosition = self.segments[1].y
+
+            if self.directionQueue[1] == "right" then
+                nextXPosition = nextXPosition + 1
+                if nextXPosition > self.tileXCount then
+                    nextXPosition = 1
+                end
+            elseif self.directionQueue[1] == "left" then
+                nextXPosition = nextXPosition - 1
+                if nextXPosition < 1 then
+                    nextXPosition = self.tileXCount
+                end
+            elseif self.directionQueue[1] == "down" then
+                nextYPosition = nextYPosition + 1
+                if nextYPosition > self.tileYCount then
+                    nextYPosition = 1
+                end
+            elseif self.directionQueue[1] == "up" then
+                nextYPosition = nextYPosition - 1
+                if nextYPosition < 1 then
+                    nextYPosition = self.tileYCount
+                end
+            end
+
+            local canMove = true
+            for segmentIndex, segment in ipairs(self.segments) do
+                if segmentIndex ~= #self.segments and nextXPosition == segment.x and nextYPosition == segment.y then
+                    canMove = false
+                end
+            end
+
+            if canMove then
+                table.insert(self.segments, 1, { x = nextXPosition, y = nextYPosition })
+                if not (self.segments[1].x == foodPosition.x and self.segments[1].y == foodPosition.y) then
+                    table.remove(self.segments)
+                end
+            else
+                self.alive = false
+            end
         end
     end
+end
 
-    if snake.alive then
-        if snake.segments[1].x == foodPosition.x and snake.segments[1].y == foodPosition.y then
-            snake:grow()
-            foodPosition = food.moveFood(TILE_X_COUNT, TILE_Y_COUNT, snake.segments)
-        end
-    elseif snake.timer >= 2 then
-        snake:reset()
+function Snake:grow()
+    -- Leave the last segment in place when growing
+    table.insert(self.segments, {
+        x = self.segments[#self.segments].x,
+        y = self.segments[#self.segments].y,
+    })
+end
+
+function Snake:draw()
+    if self.alive then
+        love.graphics.setColor(0.6, 1, 0.32)
+    else
+        love.graphics.setColor(0.5, 0.5, 0.5)
+    end
+
+    for _, segment in ipairs(self.segments) do
+        love.graphics.rectangle(
+            "fill",
+            (segment.x - 1) * self.tileSize,
+            (segment.y - 1) * self.tileSize,
+            self.tileSize,
+            self.tileSize
+        )
     end
 end
 
-function love.keypressed(key)
-    if key == "right" then
-        snake:changeDirection("right")
-    elseif key == "left" then
-        snake:changeDirection("left")
-    elseif key == "up" then
-        snake:changeDirection("up")
-    elseif key == "down" then
-        snake:changeDirection("down")
+function Snake:changeDirection(newDirection)
+    local lastDirection = self.directionQueue[#self.directionQueue]
+    if
+        not (
+            (lastDirection == "left" and newDirection == "right")
+            or (lastDirection == "right" and newDirection == "left")
+            or (lastDirection == "up" and newDirection == "down")
+            or (lastDirection == "down" and newDirection == "up")
+        )
+    then
+        table.insert(self.directionQueue, newDirection)
     end
 end
 
-function drawGrid()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.setLineWidth(3)
-
-    -- Horizontal lines
-    for i = 0, TILE_Y_COUNT do
-        love.graphics.line(0, i * TILE_SIZE, TILE_X_COUNT * TILE_SIZE, i * TILE_SIZE)
-    end
-
-    -- Vertical lines
-    for i = 0, TILE_X_COUNT do
-        love.graphics.line(i * TILE_SIZE, 0, i * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
-    end
-end
-
-function love.draw()
-    -- Draw Background
-    love.graphics.setColor(0.28, 0.28, 0.28)
-    love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
-
-    -- Draw Snake
-    snake:draw()
-
-    -- Draw Food
-    love.graphics.setColor(1, 0.3, 0.3)
-    love.graphics.rectangle("fill", (foodPosition.x - 1) * TILE_SIZE, (foodPosition.y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-
-    -- drawGrid()
-
-    for _, button in ipairs(buttons) do
-        button:draw()
-    end
-end
+return Snake

@@ -1,2 +1,2 @@
 require("conf")
-require("snake")
+require("Game")
