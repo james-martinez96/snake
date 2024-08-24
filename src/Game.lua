@@ -1,8 +1,8 @@
 local Button = require("ui.Button")
+local Food = require("Food")
 local LayoutManager = require("ui.LayoutManager")
-local food = require("food")
-local window = require("window")
 local Snake = require("snake")
+local window = require("window")
 
 TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT = window.setupWindow()
 ---@type LayoutManager
@@ -23,8 +23,11 @@ local snake = Snake:new({
 }, TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT)
 
 function love.load()
+    ---@type Food
+    food = Food:new(TILE_X_COUNT, TILE_Y_COUNT)
+
+    foodPosition = food:move(snake.segments)
     snake:reset()
-    foodPosition = food.moveFood(TILE_X_COUNT, TILE_Y_COUNT, snake.segments)
 end
 
 function love.update(dt)
@@ -36,10 +39,11 @@ function love.update(dt)
         end
     end
 
+    -- eating
     if snake.alive then
         if snake.segments[1].x == foodPosition.x and snake.segments[1].y == foodPosition.y then
             snake:grow()
-            foodPosition = food.moveFood(TILE_X_COUNT, TILE_Y_COUNT, snake.segments)
+            foodPosition = food:move(snake.segments)
         end
     elseif snake.timer >= 2 then
         snake:reset()
@@ -73,19 +77,32 @@ function drawGrid()
     end
 end
 
-function love.draw()
+function drawBackground()
     -- Draw Background
     love.graphics.setColor(0.28, 0.28, 0.28)
     love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
+end
 
-    -- Draw Snake
-    snake:draw()
-
+function drawFood()
     -- Draw Food
     love.graphics.setColor(1, 0.3, 0.3)
-    love.graphics.rectangle("fill", (foodPosition.x - 1) * TILE_SIZE, (foodPosition.y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+    love.graphics.rectangle(
+        "fill",
+        (foodPosition.x - 1) * TILE_SIZE,
+        (foodPosition.y - 1) * TILE_SIZE,
+        TILE_SIZE,
+        TILE_SIZE
+    )
+end
 
-    -- drawGrid()
+function love.draw()
+    drawBackground()
+
+    snake:draw()
+
+    drawFood()
+
+    drawGrid()
 
     for _, button in ipairs(buttons) do
         button:draw()
