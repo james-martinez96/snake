@@ -87,6 +87,12 @@ function Snake:grow()
 end
 
 function Snake:draw()
+    if self.alive then
+        love.graphics.setColor(0.6, 1, 0.32)
+    else
+        love.graphics.setColor(0.5, 0.5, 0.5)
+    end
+
     for _, segment in ipairs(self.segments) do
         love.graphics.rectangle(
             "fill",

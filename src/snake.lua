@@ -78,12 +78,6 @@ function love.draw()
     love.graphics.setColor(0.28, 0.28, 0.28)
     love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
 
-    if snake.alive then
-        love.graphics.setColor(0.6, 1, 0.32)
-    else
-        love.graphics.setColor(0.5, 0.5, 0.5)
-    end
-
     -- Draw Snake
     snake:draw()
 
