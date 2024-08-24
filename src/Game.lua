@@ -24,7 +24,7 @@ local snake = Snake:new({
 
 function love.load()
     ---@type Food
-    food = Food:new(TILE_X_COUNT, TILE_Y_COUNT)
+    food = Food:new(TILE_X_COUNT, TILE_Y_COUNT, TILE_SIZE)
 
     foodPosition = food:move(snake.segments)
     snake:reset()
@@ -83,24 +83,12 @@ function drawBackground()
     love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
 end
 
-function drawFood()
-    -- Draw Food
-    love.graphics.setColor(1, 0.3, 0.3)
-    love.graphics.rectangle(
-        "fill",
-        (foodPosition.x - 1) * TILE_SIZE,
-        (foodPosition.y - 1) * TILE_SIZE,
-        TILE_SIZE,
-        TILE_SIZE
-    )
-end
-
 function love.draw()
     drawBackground()
 
     snake:draw()
 
-    drawFood()
+    food:draw()
 
     drawGrid()
 
