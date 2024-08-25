@@ -2,13 +2,13 @@ local Button = {}
 Button.__index = Button
 
 function Button:new(text, x, y, w, h)
-    local self = setmetatable({}, Button)
-    self.text = text
-    self.x = x
-    self.y = y
-    self.w = w
-    self.h = h
-    return self
+    local instance = setmetatable({}, Button)
+    instance.text = text
+    instance.x = x
+    instance.y = y
+    instance.w = w
+    instance.h = h
+    return instance
 end
 
 function Button:isHovered()
