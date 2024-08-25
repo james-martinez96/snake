@@ -4,25 +4,31 @@ local LayoutManager = require("ui.LayoutManager")
 local Snake = require("snake")
 local window = require("window")
 
-TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT = window.setupWindow()
----@type LayoutManager
-local layout = LayoutManager:new(50, 50, 0, 20, "vertical")
-
-local buttons = {}
-
-for i = 1, 3 do
-    local button = Button:new("Button " .. i, 0, 0, 100, 30)
-    table.insert(buttons, button)
-    layout:addElement(button, button.w, button.h)
-end
-
-local snake = Snake:new({
-    { x = 3, y = 1 },
-    { x = 2, y = 1 },
-    { x = 1, y = 1 },
-}, TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT)
+local TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT
+local snake
+local layout
+local buttons
 
 function love.load()
+    TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT = window.setupWindow()
+
+    ---@type LayoutManager
+    layout = LayoutManager:new(50, 50, 0, 20, "vertical")
+
+    buttons = {}
+
+    for i = 1, 3 do
+        local button = Button:new("Button " .. i, 0, 0, 100, 30)
+        table.insert(buttons, button)
+        layout:addElement(button, button.w, button.h)
+    end
+
+    snake = Snake:new({
+        { x = 3, y = 1 },
+        { x = 2, y = 1 },
+        { x = 1, y = 1 },
+    }, TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT)
+
     ---@type Food
     food = Food:new(TILE_X_COUNT, TILE_Y_COUNT, TILE_SIZE)
 

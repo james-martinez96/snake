@@ -9,7 +9,8 @@ Food.__index = Food
 
 --- Creates a new Food instance.
 --- @param TILE_X_COUNT integer The number of tiles along the X axis.
---- @param TILE_Y_COUNT integer The numbet of tiles along the Y axis.
+--- @param TILE_Y_COUNT integer The number of tiles along the Y axis.
+--- @param TILE_SIZE integer The size of each tile.
 function Food:new(TILE_X_COUNT, TILE_Y_COUNT, TILE_SIZE)
     local instance = setmetatable({}, Food)
     instance.TILE_X_COUNT = TILE_X_COUNT
@@ -53,14 +54,13 @@ function Food:move(snakeSegments)
 end
 
 function Food:draw()
-    -- Draw Food
     love.graphics.setColor(1, 0.3, 0.3)
     love.graphics.rectangle(
         "fill",
-        (self.x - 1) * TILE_SIZE,
-        (self.y - 1) * TILE_SIZE,
-        TILE_SIZE,
-        TILE_SIZE
+        (self.x - 1) * self.TILE_SIZE,
+        (self.y - 1) * self.TILE_SIZE,
+        self.TILE_SIZE,
+        self.TILE_SIZE
     )
 end
 
