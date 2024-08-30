@@ -23,6 +23,7 @@ function love.load()
         layout:addElement(button, button.w, button.h)
     end
 
+    -- TODO: handle snake segments in snake.lua
     snake = Snake:new({
         { x = 3, y = 1 },
         { x = 2, y = 1 },
@@ -69,34 +70,41 @@ function love.keypressed(key)
 end
 
 function drawGrid()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.setLineWidth(3)
-
-    -- Horizontal lines
-    for i = 0, TILE_Y_COUNT do
-        love.graphics.line(0, i * TILE_SIZE, TILE_X_COUNT * TILE_SIZE, i * TILE_SIZE)
-    end
-
-    -- Vertical lines
-    for i = 0, TILE_X_COUNT do
-        love.graphics.line(i * TILE_SIZE, 0, i * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
-    end
-end
-
-function drawBackground()
-    -- Draw Background
+    -- Draw a square 1 pixel smaller then the grid to simulate grid lines.
     love.graphics.setColor(0.28, 0.28, 0.28)
-    love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
+    for x = 1, TILE_X_COUNT do
+        for y = 1, TILE_Y_COUNT do
+            love.graphics.rectangle("fill", (x-1) * TILE_SIZE, (y-1) * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1)
+        end
+    end
+
+    -- love.graphics.setColor(0, 0, 0)
+    -- love.graphics.setLineWidth(3)
+    --
+    -- -- Horizontal lines
+    -- for i = 0, TILE_Y_COUNT do
+    --     love.graphics.line(0, i * TILE_SIZE, TILE_X_COUNT * TILE_SIZE, i * TILE_SIZE)
+    -- end
+    --
+    -- -- Vertical lines
+    -- for i = 0, TILE_X_COUNT do
+    --     love.graphics.line(i * TILE_SIZE, 0, i * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
+    -- end
 end
+
+-- function drawBackground()
+--     -- Draw Background
+--     love.graphics.setColor(0.28, 0.28, 0.28)
+--     love.graphics.rectangle("fill", 0, 0, TILE_X_COUNT * TILE_SIZE, TILE_Y_COUNT * TILE_SIZE)
+-- end
 
 function love.draw()
-    drawBackground()
+    -- drawBackground()
+    drawGrid()
 
     snake:draw()
 
     food:draw()
-
-    drawGrid()
 
     for _, button in ipairs(buttons) do
         button:draw()

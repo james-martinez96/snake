@@ -98,8 +98,9 @@ function Snake:draw()
             "fill",
             (segment.x - 1) * self.tileSize,
             (segment.y - 1) * self.tileSize,
-            self.tileSize,
-            self.tileSize
+            -- -1 pixel on each side
+            (self.tileSize - 1),
+            (self.tileSize - 1)
         )
     end
 end

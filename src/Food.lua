@@ -59,8 +59,9 @@ function Food:draw()
         "fill",
         (self.x - 1) * self.TILE_SIZE,
         (self.y - 1) * self.TILE_SIZE,
-        self.TILE_SIZE,
-        self.TILE_SIZE
+        -- -1 pixel on each side
+        self.TILE_SIZE - 1,
+        self.TILE_SIZE - 1
     )
 end
 
