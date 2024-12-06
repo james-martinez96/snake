@@ -4,7 +4,6 @@ local LayoutManager = require("ui.LayoutManager")
 local Snake = require("snake")
 local window = require("window")
 
-local TILE_SIZE, TILE_X_COUNT, TILE_Y_COUNT
 local snake
 local layout
 local buttons
@@ -66,6 +65,8 @@ function love.keypressed(key)
         snake:changeDirection("up")
     elseif key == "down" then
         snake:changeDirection("down")
+    elseif key == "q" then
+        love.event.quit(0)
     end
 end
 
